@@ -10,6 +10,6 @@ const Comment=sequelize.define('Comment',{
 
 })
 
-User.hasMany(Comment,{as:'comments'})
-Comment.belongsTo(User,{foreignKey:'UserId',as:"user" })
+User.hasMany(Comment,{as:'comments'})    //Add id of user in UserId coloumn of comment
+Comment.belongsTo(User,{as:"user" ,targetKey:'id'})  //Reverse technique to get user of comment by comparing UserId with id of User table 
 module.exports=Comment

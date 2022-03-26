@@ -17,12 +17,14 @@ db.authenticate()
 //Insert a new Record
 app.post('/user',async(req,res)=>{
   //console.log(req.body)
+  try{
   await db.sync();
  await User.create({name:req.body.Name,email:req.body.Email}).then(result=>{
 res.json(result);
-  }).catch(err=>{
+  })}
+  catch(err){
       res.json(err);
-  })
+  }
 })
 // All Users Data
 app.get('/user',async(req,res)=>{
@@ -60,24 +62,29 @@ app.delete('/user-:id',async(req,res)=>{
   app.post('/comment',async(req,res)=>{
     console.log(req.body)
     await db.sync();
-    try{
+   
 await Comment.create({
   
   text:req.body.text,
-  USERId:req.body.user_id
+  UserId:req.body.user_id
 }).then(data=>{
  return res.json({
     Message:'Successful'
     ,Record:data
-  })
+  })})
   .catch(err=>{
    return res.send(err)
   })
-})
-    }
-    catch(err){
-    console.log(err)
-    }   
+
+ 
+
+   
+  })
+    //get all comments
+  app.get('/comment',async(req,res)=>{
+    await db.sync();
+    const all_comments=await Comment.findAll({attributes:['id','text','USERId'],include:["user"]})
+    return res.send(all_comments);
   })
 app.listen(3000,()=>{
     console.log("Server is Active at Port 3000");
