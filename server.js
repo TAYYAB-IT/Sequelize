@@ -29,13 +29,13 @@ res.json(result);
 // All Users Data
 app.get('/user',async(req,res)=>{
   await db.sync();
-  const all_users=await User.findAll({attributes:['id','name','email'],include:["comments"]})
+  const all_users=await User.findAll({attributes:['id','name','email'],include:[{model:db.models.Comment,as:"comments",attributes:["id","text"]}]})
   return res.send(all_users);
 })
 //Selective user
 app.get('/user-:id',async(req,res)=>{
   await db.sync();
-  const user=await User.findOne({where:{id:req.params.id},attributes:['id','name','email'],include:["comments"]});
+  const user=await User.findOne({where:{id:req.params.id},attributes:['id','name','email'],include:[{model:db.models.Comment,as:"comments",attributes:["id","text"]}]});
   res.json(user)
 })
 //Update a record
